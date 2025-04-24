@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18'
+            args '-v $HOME/.npm:/root/.npm' // opcjonalnie: cache dla npm
+        }
+    }
 
     stages {
         stage('Clone') {
@@ -19,21 +24,19 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                sh 'npm test || true'  // tymczasowo, jeśli są błędy w testach
+                sh 'npm test || true'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploy stage - simulated'
-                // Można tu dodać np. docker run albo rsync
             }
         }
 
         stage('Publish') {
             steps {
                 echo 'Publishing artifacts - simulated'
-                // Np. upload do S3 lub DockerHub
             }
         }
     }
