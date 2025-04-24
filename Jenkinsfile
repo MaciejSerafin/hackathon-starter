@@ -1,13 +1,5 @@
 pipeline {
     agent any
-    
-    triggers {
-        // Możesz ustawić ręczne uruchomienie pipeline'a, np. przez "Build Now" w Jenkinsie
-        // Można także dodać trigger na commit do repozytorium
-        // np. trigger co 5 minut: cron('H/5 * * * *')
-        // lub na podstawie push do gałęzi:
-        // pollSCM('* * * * *')  // Aktywacja na każde zmiany w repozytorium
-    }
 
     stages {
         stage('Checkout') {
@@ -38,10 +30,8 @@ pipeline {
                 }
             }
         }
-        
-        // Możesz dodać inne etapy jak Deploy, jeśli chcesz, np. deploy do środowiska produkcyjnego
     }
-    
+
     post {
         success {
             echo 'Pipeline executed successfully!'
