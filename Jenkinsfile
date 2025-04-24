@@ -4,18 +4,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Krok do klonowania repozytorium
                 git 'https://github.com/MaciejSerafin/hackathon-starter.git'
+            }
+        }
+
+        stage('Install Node.js') {
+            steps {
+                script {
+                    // Instalacja Node.js i npm na maszynie roboczej
+                    echo 'Installing Node.js and npm...'
+                    sh 'curl -sL https://deb.nodesource.com/setup_16.x | bash -'
+                    sh 'sudo apt-get install -y nodejs'
+                }
             }
         }
 
         stage('Build') {
             steps {
                 script {
-                    // Komenda do kompilacji aplikacji
                     echo 'Building the application...'
-                    // Wstaw odpowiednią komendę budowania np. `npm install` dla Node.js
-                    sh 'npm install' 
+                    sh 'npm install'
                 }
             }
         }
@@ -23,9 +31,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    // Komenda do uruchamiania testów aplikacji
                     echo 'Running tests...'
-                    // Wstaw odpowiednią komendę testowania, np. `npm test`
                     sh 'npm test'
                 }
             }
