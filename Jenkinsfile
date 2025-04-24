@@ -1,35 +1,29 @@
 pipeline {
     agent any
-
-    environment {
-        // Określ zmienne środowiskowe, jeśli są potrzebne
+    
+    triggers {
+        // Możesz ustawić ręczne uruchomienie pipeline'a, np. przez "Build Now" w Jenkinsie
+        // Można także dodać trigger na commit do repozytorium
+        // np. trigger co 5 minut: cron('H/5 * * * *')
+        // lub na podstawie push do gałęzi:
+        // pollSCM('* * * * *')  // Aktywacja na każde zmiany w repozytorium
     }
 
     stages {
-        stage('Commit') {
+        stage('Checkout') {
             steps {
-                script {
-                    // Przykład: Komitowanie zmian w repozytorium, jeśli to wymagane
-                    // Skrypt do wykonania commit, np.:
-                    // sh 'git commit -m "Automatyczny commit"'
-                }
-            }
-        }
-
-        stage('Clone') {
-            steps {
-                script {
-                    // Klonowanie repozytorium, jeśli nie jest dostępne lokalnie
-                    git 'https://github.com/MaciejSerafin/hackathon-starter.git'
-                }
+                // Krok do klonowania repozytorium
+                git 'https://github.com/MaciejSerafin/hackathon-starter.git'
             }
         }
 
         stage('Build') {
             steps {
                 script {
-                    // Budowanie projektu (np. instalacja zależności w Node.js)
-                    sh 'npm install'  // Możesz dostosować to do swojego projektu
+                    // Komenda do kompilacji aplikacji
+                    echo 'Building the application...'
+                    // Wstaw odpowiednią komendę budowania np. `npm install` dla Node.js
+                    sh 'npm install' 
                 }
             }
         }
@@ -37,10 +31,23 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    // Uruchamianie testów jednostkowych (np. dla aplikacji Node.js)
-                    sh 'npm test'  // Przykład testów w Node.js
+                    // Komenda do uruchamiania testów aplikacji
+                    echo 'Running tests...'
+                    // Wstaw odpowiednią komendę testowania, np. `npm test`
+                    sh 'npm test'
                 }
             }
+        }
+        
+        // Możesz dodać inne etapy jak Deploy, jeśli chcesz, np. deploy do środowiska produkcyjnego
+    }
+    
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
