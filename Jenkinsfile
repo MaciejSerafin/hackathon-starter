@@ -11,10 +11,10 @@ pipeline {
         stage('Install Node.js') {
             steps {
                 script {
-                    // Instalacja Node.js i npm na maszynie roboczej
+                    // Instalacja Node.js 20.x (najbardziej aktualna LTS)
                     echo 'Installing Node.js and npm...'
-                    sh 'curl -sL https://deb.nodesource.com/setup_16.x | bash -'
-                    sh 'sudo apt-get install -y nodejs'
+                    sh 'curl -sL https://deb.nodesource.com/setup_20.x | bash -'
+                    sh 'apt-get install -y nodejs'  // Nie używaj `sudo`, bo to może być problematyczne w Jenkinsie
                 }
             }
         }
